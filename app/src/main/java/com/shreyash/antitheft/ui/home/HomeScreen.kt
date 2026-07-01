@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +60,17 @@ fun HomeScreen(
     val context = LocalContext.current
     val prefsManager = remember { PrefsManager(context) }
     var isArmed by remember { mutableStateOf(prefsManager.isArmed) }
+
+    LaunchedEffect(Unit) {
+        if (prefsManager.pendingAlarm) {
+            prefsManager.pendingAlarm = false
+            val intent = Intent(context, AlarmActivity::class.java).apply {
+                putExtra(ChargingReceiver.EXTRA_ALARM_TYPE, ChargingReceiver.ALARM_TYPE_CHARGING)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+            context.startActivity(intent)
+        }
+    }
 
     val spacingSmall = dimensionResource(R.dimen.spacing_small)
     val spacingXxlarge = dimensionResource(R.dimen.spacing_xxlarge)

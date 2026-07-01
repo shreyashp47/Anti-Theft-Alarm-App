@@ -20,10 +20,15 @@ class PrefsManager(context: Context) {
         get() = prefs.getLong(KEY_LAST_DISCONNECT, -1L)
         set(value) = prefs.edit().putLong(KEY_LAST_DISCONNECT, value).apply()
 
+    var pendingAlarm: Boolean
+        get() = prefs.getBoolean(KEY_PENDING_ALARM, false)
+        set(value) = prefs.edit().putBoolean(KEY_PENDING_ALARM, value).apply()
+
     companion object {
         private const val PREFS_NAME = "antitheft_prefs"
         private const val KEY_ARMED = "is_armed"
         private const val KEY_CHARGING_GUARD = "charging_guard_enabled"
         private const val KEY_LAST_DISCONNECT = "last_disconnect_time"
+        private const val KEY_PENDING_ALARM = "pending_alarm"
     }
 }

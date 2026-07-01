@@ -32,7 +32,7 @@ class ChargingReceiver : BroadcastReceiver() {
                 }
 
                 eventLog.addEvent("alarm", "Charging Guard triggered")
-                showAlarmNotification(context)
+                showAlarmNotification(context, prefs)
             }
             Intent.ACTION_POWER_CONNECTED -> {
                 eventLog.addEvent("info", "Charger connected")
@@ -40,18 +40,20 @@ class ChargingReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun showAlarmNotification(context: Context) {
+    private fun showAlarmNotification(context: Context, prefs: PrefsManager) {
         NotificationHelper.createChannels(context)
 
+        val alarmIntent = Intent(context, AlarmActivity::class.java).apply {
+            putExtra(EXTRA_ALARM_TYPE, ALARM_TYPE_CHARGING)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
         try {
-            val alarmIntent = Intent(context, AlarmActivity::class.java).apply {
-                putExtra(EXTRA_ALARM_TYPE, ALARM_TYPE_CHARGING)
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
             context.startActivity(alarmIntent)
             return
         } catch (_: Exception) {
         }
+
+        prefs.pendingAlarm = true
 
         val pendingIntent = PendingIntent.getActivity(
             context,

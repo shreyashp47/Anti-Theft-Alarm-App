@@ -1,6 +1,5 @@
 package com.shreyash.antitheft.ui.alarm
 
-import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -60,11 +59,22 @@ class AlarmActivity : ComponentActivity() {
         pinManager = PinManager(this)
         alarmPlayer = AlarmPlayer(this)
         prefsManager = PrefsManager(this)
+        prefsManager.pendingAlarm = false
         val eventLog = EventLog(this)
         val alarmType = intent.getStringExtra(ChargingReceiver.EXTRA_ALARM_TYPE) ?: "unknown"
 
         alarmPlayer.play()
         eventLog.addEvent("alarm", "Alarm triggered: $alarmType")
+
+        countdownTimer = object : CountDownTimer(30_000L, 1_000L) {
+            override fun onTick(millisUntilFinished: Long) {
+            }
+            override fun onFinish() {
+                alarmPlayer.stop()
+                eventLog.addEvent("info", "Alarm auto-dismissed after 30s")
+                finish()
+            }
+        }.start()
 
         setContent {
             AntiTheftAlarmTheme {
