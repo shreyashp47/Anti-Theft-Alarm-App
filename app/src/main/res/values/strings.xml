@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">AntiTheft Alarm</string>
+    <string name="app_name">Anti Theft</string>
 
     <!-- PIN create -->
     <string name="pin_create_title">Set Your PIN</string>
@@ -32,8 +32,45 @@
     <string name="incorrect_old_pin">Incorrect old PIN</string>
 
     <!-- Home -->
-    <string name="home_title">AntiTheft Alarm</string>
+    <string name="home_title">Anti Theft</string>
     <string name="app_description">Keep your device safe with intelligent theft detection.</string>
     <string name="armed">Armed</string>
     <string name="disarmed">Disarmed</string>
+
+    <!-- Notification channel -->
+    <string name="notification_channel_name">Alarm Service</string>
+    <string name="notification_channel_description">Shows a persistent notification while the alarm service is running</string>
+    <string name="notification_title">Anti Theft</string>
+    <string name="notification_text">Guard mode is active — monitoring for threats</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_permissions_section">Permissions</string>
+    <string name="back">Back</string>
+
+    <!-- Permission names -->
+    <string name="permission_name_notifications">Notifications</string>
+    <string name="permission_name_location">Location</string>
+    <string name="permission_name_camera">Camera</string>
+    <string name="permission_name_phone">Phone State</string>
+    <string name="permission_name_overlay">Display Over Other Apps</string>
+    <string name="permission_name_battery">Battery Optimization</string>
+    <string name="permission_name_device_admin">Device Admin</string>
+
+    <!-- Permission rationales -->
+    <string name="permission_notifications_rationale">Notifications are used to keep the alarm service running in the background and alert you to security events.</string>
+    <string name="permission_location_rationale">Location access enables geofence safe zones — the alarm won\'t trigger when you\'re at trusted locations like home.</string>
+    <string name="permission_camera_rationale">Camera access allows the app to capture a photo of anyone who enters an incorrect PIN, helping identify intruders.</string>
+    <string name="permission_phone_rationale">Phone state permission detects SIM card changes and helps notify trusted contacts if your device is tampered with.</string>
+    <string name="permission_overlay_rationale">Drawing over other apps allows the alarm screen to appear on top of any app when a threat is detected.</string>
+    <string name="permission_battery_rationale">Battery optimization exemption prevents Android from killing the alarm service, ensuring continuous protection.</string>
+    <string name="permission_device_admin_rationale">Device Admin privileges prevent unauthorized uninstallation and add an extra layer of security against theft.</string>
+
+    <!-- Permissions UI -->
+    <string name="permissions_grant">Grant</string>
+    <string name="permissions_granted">Granted</string>
+    <string name="permissions_info_title">Why this permission?</string>
+
+    <!-- Service error -->
+    <string name="service_start_error">Could not start alarm service</string>
 </resources>

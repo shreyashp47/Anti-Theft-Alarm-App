@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.shreyash.antitheft.security.PinManager
 import com.shreyash.antitheft.ui.home.HomeScreen
+import com.shreyash.antitheft.ui.permission.SettingsScreen
 import com.shreyash.antitheft.ui.pin.PinChangeScreen
 import com.shreyash.antitheft.ui.pin.PinCreateScreen
 import com.shreyash.antitheft.ui.pin.PinEntryScreen
@@ -82,6 +83,9 @@ private fun AppNavigation(pinManager: PinManager) {
                 HomeScreen(
                     onChangePin = {
                         navController.navigate("pin_change")
+                    },
+                    onNavigateToSettings = {
+                        navController.navigate("settings")
                     }
                 )
             }
@@ -94,6 +98,13 @@ private fun AppNavigation(pinManager: PinManager) {
                         pinManager.changePin(oldPin, newPin)
                     },
                     onPinChanged = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable("settings") {
+                SettingsScreen(
+                    onBack = {
                         navController.popBackStack()
                     }
                 )
