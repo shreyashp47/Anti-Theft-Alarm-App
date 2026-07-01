@@ -5,6 +5,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
+import com.shreyash.antitheft.BuildConfig
 import com.shreyash.antitheft.R
 
 class AlarmPlayer(private val appContext: Context) {
@@ -17,14 +18,17 @@ class AlarmPlayer(private val appContext: Context) {
         stop()
 
         val audioManager = appContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val maxAlarm = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+        val isDebug = BuildConfig.DEBUG
 
-        for (i in 0 until maxAlarm) {
-            audioManager.adjustStreamVolume(
-                AudioManager.STREAM_ALARM,
-                AudioManager.ADJUST_RAISE,
-                0
-            )
+        if (!isDebug) {
+            val maxAlarm = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+            for (i in 0 until maxAlarm) {
+                audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_ALARM,
+                    AudioManager.ADJUST_RAISE,
+                    0
+                )
+            }
         }
 
         audioManager.adjustStreamVolume(
@@ -34,6 +38,7 @@ class AlarmPlayer(private val appContext: Context) {
         )
 
         val uri = Uri.parse("android.resource://${appContext.packageName}/${R.raw.alarm}")
+        val volume = if (isDebug) 0.3f else 1.0f
 
         try {
             mediaPlayer = MediaPlayer().apply {
@@ -45,7 +50,7 @@ class AlarmPlayer(private val appContext: Context) {
                 )
                 setDataSource(appContext, uri)
                 prepare()
-                setVolume(1.0f, 1.0f)
+                setVolume(volume, volume)
                 isLooping = isLooping
                 start()
             }
@@ -60,14 +65,18 @@ class AlarmPlayer(private val appContext: Context) {
 
     private fun tryFallback(audioManager: AudioManager, uri: Uri): MediaPlayer? {
         return try {
-            val maxMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-            for (i in 0 until maxMusic) {
-                audioManager.adjustStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.ADJUST_RAISE,
-                    0
-                )
+            val isDebug = BuildConfig.DEBUG
+            if (!isDebug) {
+                val maxMusic = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+                for (i in 0 until maxMusic) {
+                    audioManager.adjustStreamVolume(
+                        AudioManager.STREAM_MUSIC,
+                        AudioManager.ADJUST_RAISE,
+                        0
+                    )
+                }
             }
+            val volume = if (isDebug) 0.3f else 1.0f
             MediaPlayer().apply {
                 setAudioAttributes(
                     AudioAttributes.Builder()
@@ -77,7 +86,7 @@ class AlarmPlayer(private val appContext: Context) {
                 )
                 setDataSource(appContext, uri)
                 prepare()
-                setVolume(1.0f, 1.0f)
+                setVolume(volume, volume)
                 isLooping = isLooping
                 start()
             }
