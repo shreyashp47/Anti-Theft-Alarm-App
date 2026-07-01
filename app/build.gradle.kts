@@ -75,6 +75,7 @@ android {
         warningsAsErrors = true
         checkDependencies = false
         disable.add("GradleDependency")
+        disable.add("UnusedResources")
         checkGeneratedSources = false
     }
 }

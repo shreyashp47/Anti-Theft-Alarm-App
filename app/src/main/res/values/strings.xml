@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">AntiTheft Alarm</string>
+
+    <!-- PIN create -->
     <string name="pin_create_title">Set Your PIN</string>
     <string name="pin_create_hint">Enter a 4-digit PIN</string>
     <string name="pin_confirm_hint">Confirm PIN</string>
     <string name="pin_mismatch">PINs do not match</string>
     <string name="pin_too_short">PIN must be at least 4 digits</string>
+
+    <!-- PIN entry -->
     <string name="pin_entry_title">Enter PIN</string>
     <string name="pin_entry_hint">Enter your PIN</string>
     <string name="pin_invalid">Incorrect PIN</string>
     <string name="unlock">Unlock</string>
     <string name="set_pin">Set PIN</string>
+
+    <!-- Lockout -->
+    <string name="lockout_title">Too Many Attempts</string>
+    <string name="lockout_message">Locked for %1$ds</string>
+    <string name="attempts_remaining" tools:ignore="PluralsCandidate">%1$d attempts remaining</string>
+
+    <!-- PIN change -->
+    <string name="change_pin">Change PIN</string>
+    <string name="old_pin_title">Enter old PIN</string>
+    <string name="old_pin_subtitle">Verify your identity with your current PIN</string>
+    <string name="new_pin_title">New PIN</string>
+    <string name="new_pin_subtitle">Choose a new 4-digit PIN</string>
+    <string name="confirm_new_pin_title">Confirm new PIN</string>
+    <string name="confirm_new_pin_subtitle">Enter the new PIN again to confirm</string>
+    <string name="incorrect_old_pin">Incorrect old PIN</string>
+
+    <!-- Home -->
     <string name="home_title">AntiTheft Alarm</string>
     <string name="app_description">Keep your device safe with intelligent theft detection.</string>
     <string name="armed">Armed</string>
