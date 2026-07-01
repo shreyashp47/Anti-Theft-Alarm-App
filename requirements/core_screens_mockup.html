@@ -1,0 +1,44 @@
+<style>
+.phone{width:200px;background:#0A0C0F;border-radius:30px;padding:8px;box-sizing:border-box}
+.screen{background:#12151A;border-radius:22px;height:400px;padding:20px 16px;box-sizing:border-box;display:flex;flex-direction:column;color:#F2F1EC;font-size:13px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.toggle{width:36px;height:20px;border-radius:10px;position:relative}
+.toggle.on{background:#0F6E56}
+.toggle.off{background:#2A2F36}
+.knob{width:16px;height:16px;border-radius:50%;background:#F2F1EC;position:absolute;top:2px}
+.frow{display:flex;align-items:center;gap:10px;background:#1B2027;border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.hrow{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #2A2F36}
+</style>
+<div class="row3">
+
+<div class="phone"><div class="screen">
+<div style="font-size:16px;font-weight:500;margin-bottom:14px">Dashboard</div>
+<div style="background:#1B2027;border-radius:14px;padding:16px;text-align:center;margin-bottom:16px">
+<div style="color:#5DCAA5;font-size:12px;margin-bottom:6px">Armed · all clear</div>
+<div class="toggle on" style="margin:0 auto"><div class="knob" style="left:18px"></div></div>
+<div style="color:#8B8A82;font-size:11px;margin-top:8px">Guard mode</div>
+</div>
+<div class="frow"><i class="ti ti-plug" style="color:#5DCAA5"></i><span>Charging guard</span><div class="toggle on" style="margin-left:auto"><div class="knob" style="left:18px"></div></div></div>
+<div class="frow"><i class="ti ti-activity" style="color:#5DCAA5"></i><span>Motion guard</span><div class="toggle on" style="margin-left:auto"><div class="knob" style="left:18px"></div></div></div>
+<div class="frow"><i class="ti ti-sim-card" style="color:#8B8A82"></i><span>SIM guard</span><div class="toggle off" style="margin-left:auto"><div class="knob" style="left:2px"></div></div></div>
+</div></div>
+
+<div class="phone"><div class="screen" style="background:#3A0E0E;align-items:center;text-align:center;gap:14px">
+<i class="ti ti-alert-triangle" style="font-size:40px;color:#F7C1C1"></i>
+<div style="font-size:16px;font-weight:500;color:#F2F1EC">Intruder alert</div>
+<div style="color:#F0997B;font-size:12px">Phone unplugged without disarming</div>
+<div style="flex:1"></div>
+<div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px">
+<span class="pdot" style="border-color:#F2F1EC"></span><span class="pdot" style="border-color:#F2F1EC"></span><span class="pdot" style="border-color:#F2F1EC"></span><span class="pdot" style="border-color:#F2F1EC"></span>
+</div>
+<div style="width:100%;background:#E24B4A;color:#4A1B0C;border-radius:10px;padding:10px 0;font-weight:500">Enter PIN to disarm</div>
+</div></div>
+
+<div class="phone"><div class="screen">
+<div style="font-size:16px;font-weight:500;margin-bottom:12px">History</div>
+<div class="hrow"><i class="ti ti-plug" style="color:#8B8A82;margin-top:2px"></i><div><div>Charging guard triggered</div><div style="color:#8B8A82;font-size:11px">Today, 2:14 PM · Cafe Wi-Fi</div></div></div>
+<div class="hrow"><i class="ti ti-shield-check" style="color:#5DCAA5;margin-top:2px"></i><div><div>Guard mode armed</div><div style="color:#8B8A82;font-size:11px">Today, 1:50 PM</div></div></div>
+<div class="hrow"><i class="ti ti-activity" style="color:#8B8A82;margin-top:2px"></i><div><div>Motion guard triggered</div><div style="color:#8B8A82;font-size:11px">Yesterday, 6:32 PM · Home</div></div></div>
+</div></div>
+
+</div>

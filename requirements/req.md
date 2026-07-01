@@ -1,0 +1,3 @@
+RoleColorHexUsePrimary / GuardDeep teal#0F6E56Icon, armed state, primary buttons, active togglesPrimary lightMint#5DCAA5Success states, "all clear" indicatorsAlarm / dangerCoral red#E24B4ATriggered alarm screen, disable warnings, critical alertsAlarm darkDeep coral#A32D2DAlarm screen accents, pressed statesBackgroundNear-black#12151AApp background (dark theme — most security apps default dark)SurfaceCharcoal#1B2027Cards, list rows, bottom sheetsText primaryOff-white#F2F1ECHeadlines, primary labelsText secondaryWarm gray#8B8A82Subtext, timestamps, helper copyBorderHairline gray#2A2F36Dividers, card outlines
+
+

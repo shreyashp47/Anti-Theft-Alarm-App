@@ -1,0 +1,44 @@
+<style>
+.phone{width:200px;background:#0A0C0F;border-radius:30px;padding:8px;box-sizing:border-box}
+.screen{background:#12151A;border-radius:22px;height:400px;padding:20px 16px;box-sizing:border-box;display:flex;flex-direction:column;color:#F2F1EC;font-size:13px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pdot{width:12px;height:12px;border-radius:50%;border:1px solid #8B8A82}
+.pdot.on{background:#5DCAA5;border-color:#5DCAA5}
+.key{background:#1B2027;border-radius:12px;text-align:center;padding:12px 0;font-size:16px}
+.prow{display:flex;align-items:center;gap:10px;background:#1B2027;border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.btn{background:#0F6E56;color:#F2F1EC;text-align:center;border-radius:10px;padding:10px 0;font-size:13px;margin-top:auto}
+</style>
+<div class="row3">
+
+<div class="phone"><div class="screen" style="align-items:center;justify-content:center;text-align:center;gap:14px">
+<svg width="56" height="56" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0F6E56"/><path d="M32 6 L54 14 V30 C54 44 44 54 32 58 C20 54 10 44 10 30 V14 Z" fill="#E1F5EE" transform="translate(0,0)"/><ellipse cx="32" cy="30" rx="12" ry="8" fill="#0F6E56"/><circle cx="32" cy="30" r="4" fill="#E1F5EE"/></svg>
+<div style="font-size:16px;font-weight:500">GuardMode</div>
+<div style="color:#8B8A82">Keep watch when you can't</div>
+<div class="btn" style="width:100%">Get started</div>
+</div></div>
+
+<div class="phone"><div class="screen">
+<div style="font-size:16px;font-weight:500;margin-bottom:6px">Set app PIN</div>
+<div style="color:#8B8A82;margin-bottom:20px">Needed to disarm alerts and change settings</div>
+<div style="display:flex;gap:10px;justify-content:center;margin-bottom:24px">
+<span class="pdot on"></span><span class="pdot on"></span><span class="pdot"></span><span class="pdot"></span>
+</div>
+<div class="row3" style="row-gap:12px">
+<div class="key">1</div><div class="key">2</div><div class="key">3</div>
+<div class="key">4</div><div class="key">5</div><div class="key">6</div>
+<div class="key">7</div><div class="key">8</div><div class="key">9</div>
+<div></div><div class="key">0</div><div class="key">⌫</div>
+</div>
+</div></div>
+
+<div class="phone"><div class="screen">
+<div style="font-size:16px;font-weight:500;margin-bottom:6px">Permissions</div>
+<div style="color:#8B8A82;margin-bottom:16px">GuardMode needs these to work</div>
+<div class="prow"><i class="ti ti-map-pin" style="color:#5DCAA5"></i><span>Location</span><i class="ti ti-check" style="margin-left:auto;color:#5DCAA5"></i></div>
+<div class="prow"><i class="ti ti-camera" style="color:#5DCAA5"></i><span>Camera</span><i class="ti ti-check" style="margin-left:auto;color:#5DCAA5"></i></div>
+<div class="prow"><i class="ti ti-phone" style="color:#5DCAA5"></i><span>Phone state</span><i class="ti ti-check" style="margin-left:auto;color:#5DCAA5"></i></div>
+<div class="prow"><i class="ti ti-bell" style="color:#8B8A82"></i><span>Notifications</span><i class="ti ti-chevron-right" style="margin-left:auto;color:#8B8A82"></i></div>
+<div class="btn">Continue</div>
+</div></div>
+
+</div>

@@ -2,11 +2,21 @@ package com.shreyash.antitheft.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Primary = Color(0xFF1B5E20)
-val PrimaryDark = Color(0xFF003300)
-val Accent = Color(0xFFFF6F00)
-val OnPrimary = Color(0xFFFFFFFF)
-val Surface = Color(0xFFFFFFFF)
-val Error = Color(0xFFD32F2F)
-val GuardActive = Color(0xFFD32F2F)
-val GuardInactive = Color(0xFF757575)
+// Primary — Deep teal
+val GuardGreen = Color(0xFF0F6E56)
+val GuardGreenLight = Color(0xFF5DCAA5)
+
+// Alarm — Coral red
+val AlarmRed = Color(0xFFE24B4A)
+val AlarmRedDark = Color(0xFFA32D2D)
+
+// Backgrounds
+val BackgroundDark = Color(0xFF12151A)
+val SurfaceDark = Color(0xFF1B2027)
+
+// Text
+val TextPrimary = Color(0xFFF2F1EC)
+val TextSecondary = Color(0xFF8B8A82)
+
+// Borders
+val BorderGray = Color(0xFF2A2F36)
