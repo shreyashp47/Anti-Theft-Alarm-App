@@ -1,0 +1,8 @@
+- Initial release
+- App-level PIN protection
+- Charging disconnect detection
+- Motion detection via accelerometer
+- SIM card removal detection
+- Intruder selfie capture
+- Geofence safe zone
+- Anti-disable protection
