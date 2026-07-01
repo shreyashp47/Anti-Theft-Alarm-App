@@ -11,6 +11,11 @@ val keystoreProps = Properties().apply {
     if (keystorePropsFile.exists()) load(keystorePropsFile.inputStream())
 }
 
+val versionPropsFile = rootProject.file("version.properties")
+val versionProps = Properties().apply {
+    if (versionPropsFile.exists()) load(versionPropsFile.inputStream())
+}
+
 android {
     namespace = "com.shreyash.antitheft"
     compileSdk = 36
@@ -19,8 +24,8 @@ android {
         applicationId = "com.shreyash.antitheft"
         minSdk = 21
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = versionProps.getProperty("versionCode", "1").toInt()
+        versionName = versionProps.getProperty("versionName", "1.0.0")
     }
 
     signingConfigs {

@@ -2,9 +2,23 @@ name: Release to Google Play
 
 on:
   push:
-    branches: [main]
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      track:
+        description: "Play Store track"
+        type: choice
+        options:
+          - internal
+          - alpha
+          - beta
+          - production
+        default: internal
+      release_notes:
+        description: "What's new in this release"
+        type: string
+        default: "Bug fixes and improvements"
 
 jobs:
   release:
@@ -42,7 +56,33 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.shreyash.antitheft
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: ${{ startsWith(github.ref, 'refs/tags/') && 'production' || 'internal' }}
+          track: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.track || 'internal' }}
           status: completed
           inAppUpdatePriority: 2
           whatsNewDirectory: whatsnew/
+
+      - name: Bump version
+        id: bump
+        run: |
+          props="version.properties"
+          code=$(grep "^versionCode=" "$props" | cut -d= -f2)
+          new_code=$((code + 1))
+          name=$(grep "^versionName=" "$props" | cut -d= -f2)
+          # bump patch segment of versionName
+          major=$(echo "$name" | cut -d. -f1)
+          minor=$(echo "$name" | cut -d. -f2)
+          patch=$(echo "$name" | cut -d. -f3)
+          new_patch=$((patch + 1))
+          new_name="${major}.${minor}.${new_patch}"
+          sed -i "s/^versionCode=.*/versionCode=$new_code/" "$props"
+          sed -i "s/^versionName=.*/versionName=$new_name/" "$props"
+          echo "new_version_code=$new_code" >> "$GITHUB_OUTPUT"
+          echo "new_version_name=$new_name" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add version.properties
+          git commit -m "Bump version to ${{ steps.bump.outputs.new_version_name }} (code ${{ steps.bump.outputs.new_version_code }}) [skip ci]"
+          git push
