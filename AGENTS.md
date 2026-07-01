@@ -75,6 +75,14 @@ app/
 ./gradlew connectedAndroidTest       # instrumented tests (emulator/device)
 ```
 
+## Local setup
+
+- **JAVA_HOME** must point to JDK 17+ (Android Studio's bundled JDK):
+  ```bash
+  export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+  ```
+  This is already added to `~/.zshrc`.
+
 ## Operational constraints
 
 - PIN **must** be set before Guard Mode can be enabled (first-run gate).
