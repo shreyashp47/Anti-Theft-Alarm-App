@@ -2,6 +2,7 @@ name: Release to Google Play
 
 on:
   push:
+    branches: [main]
     tags:
       - "v*"
   workflow_dispatch:
@@ -56,7 +57,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.shreyash.antitheft
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.track || 'internal' }}
+          track: ${{ startsWith(github.ref, 'refs/tags/') && 'production' || (github.event_name == 'workflow_dispatch' && github.event.inputs.track || 'internal') }}
           status: completed
           inAppUpdatePriority: 2
           whatsNewDirectory: whatsnew/
