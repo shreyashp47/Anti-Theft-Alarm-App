@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — AntiTheft Alarm</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #1a1a1a;
+    line-height: 1.6;
+  }
+  h1 { color: #1B5E20; border-bottom: 2px solid #1B5E20; padding-bottom: 8px; }
+  h2 { color: #1B5E20; margin-top: 32px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+  th { background: #1B5E20; color: #fff; }
+  tr:nth-child(even) { background: #f5f5f5; }
+  a { color: #1B5E20; }
+  .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 14px; color: #666; }
+</style>
+</head>
+<body>
+
+<h1>Privacy Policy</h1>
+<p><strong>Last updated:</strong> July 1, 2026</p>
+
+<h2>Overview</h2>
+<p>AntiTheft Alarm is an open-source Android application that provides theft detection and alarm functionality. This privacy policy explains how the app handles your data.</p>
+
+<h2>Data Collection</h2>
+<p>AntiTheft Alarm <strong>does not collect, store, or transmit any personal data</strong> to any server. The app operates entirely on-device with no backend infrastructure.</p>
+
+<h2>Data Storage</h2>
+<p>All data created by the app is stored locally on your device only:</p>
+
+<table>
+  <tr><th>Data</th><th>Storage Method</th><th>Purpose</th></tr>
+  <tr><td>App PIN</td><td>EncryptedSharedPreferences (AES-256)</td><td>Verify your identity before disarming or changing settings</td></tr>
+  <tr><td>Feature preferences</td><td>SharedPreferences</td><td>Remember which guard features you have enabled</td></tr>
+  <tr><td>Event history</td><td>App-internal files</td><td>Display past alarm triggers in the History screen</td></tr>
+  <tr><td>Intruder photos</td><td>App-internal storage</td><td>Capture images from front camera after failed PIN attempts</td></tr>
+</table>
+
+<h2>Permissions</h2>
+<p>The app requests permissions solely for their intended features. All permissions are optional and can be revoked at any time via Android Settings.</p>
+
+<ul>
+  <li><strong>Notifications</strong> — Persistent foreground service notification (required for Android 8+ background operation)</li>
+  <li><strong>Location</strong> — Geofence Guard feature (GPS-based safe zone detection)</li>
+  <li><strong>Camera</strong> — Intruder Selfie feature (front camera capture after failed PIN attempts)</li>
+  <li><strong>Phone state</strong> — SIM Guard feature (detect SIM card removal/swap)</li>
+  <li><strong>Device Admin</strong> — Anti-disable protection</li>
+  <li><strong>Display over other apps</strong> — Show alarm screen when phone is locked</li>
+  <li><strong>Battery optimization exemption</strong> — Prevent system from killing foreground service</li>
+</ul>
+
+<h2>Data Sharing</h2>
+<p>AntiTheft Alarm <strong>does not share any data</strong> with third parties. The app has no analytics SDKs, no crash reporting tools, and no network libraries.</p>
+<p>The only optional data transmission is SMS or email alerts to a trusted contact that you explicitly configure. This data is sent via Android's system APIs and is not routed through any intermediate server.</p>
+
+<h2>Children's Privacy</h2>
+<p>This app does not knowingly collect any personal information from children under 13.</p>
+
+<h2>Open Source</h2>
+<p>The source code is publicly available on GitHub. You may verify that no data collection or transmission code exists in the application.</p>
+
+<h2>Changes</h2>
+<p>Updates to this policy will be reflected here. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+
+<h2>Contact</h2>
+<p>For questions, open an issue on the <a href="https://github.com/shreyashp47/Anti-Theft-Alarm-App/issues">GitHub repository</a>.</p>
+
+<div class="footer">
+  <p>AntiTheft Alarm &mdash; Open source &bull; No ads &bull; No tracking</p>
+</div>
+
+</body>
+</html>
