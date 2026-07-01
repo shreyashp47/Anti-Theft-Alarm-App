@@ -146,6 +146,8 @@ fun HomeScreen(
                 var refreshKey by remember { mutableStateOf(0) }
                 val dateFormat = remember { SimpleDateFormat("HH:mm:ss", Locale.getDefault()) }
                 val lastDisconnect = if (refreshKey >= 0) prefsManager.lastDisconnectTime else prefsManager.lastDisconnectTime
+                val lastPoll = prefsManager.lastPollTime
+                val charging = prefsManager.isCharging
                 val lastEvents = eventLog.getEvents().take(5)
 
                 Card(
@@ -161,6 +163,7 @@ fun HomeScreen(
                         Text("── DEBUG ──", style = MaterialTheme.typography.labelSmall)
                         Spacer(Modifier.height(2.dp))
                         Text("Armed: ${prefsManager.isArmed}  |  Guard: ${prefsManager.isChargingGuardEnabled}", style = MaterialTheme.typography.labelSmall, fontFamily = FontFamily.Monospace)
+                        Text("Charging: $charging  |  Poll: ${if (lastPoll > 0) dateFormat.format(Date(lastPoll)) else "—"}", style = MaterialTheme.typography.labelSmall, fontFamily = FontFamily.Monospace)
                         if (lastDisconnect > 0) {
                             Text("Last unplug: ${dateFormat.format(Date(lastDisconnect))}", style = MaterialTheme.typography.labelSmall, fontFamily = FontFamily.Monospace)
                         } else {

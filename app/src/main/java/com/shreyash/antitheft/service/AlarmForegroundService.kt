@@ -54,9 +54,12 @@ class AlarmForegroundService : Service() {
     }
 
     private fun checkChargingState() {
+        val prefs = PrefsManager(this)
         val nowCharging = isCurrentlyCharging()
+        prefs.lastPollTime = System.currentTimeMillis()
+        prefs.isCharging = nowCharging
+
         if (wasCharging && !nowCharging) {
-            val prefs = PrefsManager(this)
             val eventLog = EventLog(this)
             prefs.lastDisconnectTime = System.currentTimeMillis()
             eventLog.addEvent("info", "Charger disconnected (service poll)")

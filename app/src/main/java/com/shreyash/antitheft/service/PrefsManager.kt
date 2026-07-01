@@ -24,11 +24,21 @@ class PrefsManager(context: Context) {
         get() = prefs.getBoolean(KEY_PENDING_ALARM, false)
         set(value) = prefs.edit().putBoolean(KEY_PENDING_ALARM, value).apply()
 
+    var lastPollTime: Long
+        get() = prefs.getLong(KEY_LAST_POLL, -1L)
+        set(value) = prefs.edit().putLong(KEY_LAST_POLL, value).apply()
+
+    var isCharging: Boolean
+        get() = prefs.getBoolean(KEY_IS_CHARGING, true)
+        set(value) = prefs.edit().putBoolean(KEY_IS_CHARGING, value).apply()
+
     companion object {
         private const val PREFS_NAME = "antitheft_prefs"
         private const val KEY_ARMED = "is_armed"
         private const val KEY_CHARGING_GUARD = "charging_guard_enabled"
         private const val KEY_LAST_DISCONNECT = "last_disconnect_time"
         private const val KEY_PENDING_ALARM = "pending_alarm"
+        private const val KEY_LAST_POLL = "last_poll_time"
+        private const val KEY_IS_CHARGING = "is_charging"
     }
 }
