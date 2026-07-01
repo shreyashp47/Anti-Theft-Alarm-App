@@ -19,40 +19,66 @@ WHITE = (255, 255, 255)
 def draw_rounded_rect(draw, xy, radius, fill):
     draw.rounded_rectangle(xy, radius=radius, fill=fill)
 
+def cubic_bezier(p0, p1, p2, p3, num_points=30):
+    """Approximate a cubic bezier curve with line segments"""
+    points = []
+    for i in range(num_points + 1):
+        t = i / num_points
+        mt = 1 - t
+        x = mt**3 * p0[0] + 3 * mt**2 * t * p1[0] + 3 * mt * t**2 * p2[0] + t**3 * p3[0]
+        y = mt**3 * p0[1] + 3 * mt**2 * t * p1[1] + 3 * mt * t**2 * p2[1] + t**3 * p3[1]
+        points.append((x, y))
+    return points
+
 def draw_shield(draw, cx, cy, size, fill_color, accent_color):
-    """Draw the shield-with-eye icon"""
+    """Draw the shield-with-eye icon matching the SVG design"""
     s = size / 64
-    # Shield body
-    shield = [
-        (cx + (32 - 22) * s, cy + (6 - 6) * s),   # top left
-        (cx + (54 - 32) * s, cy + (14 - 6) * s),   # top right
-        (cx + (54 - 32) * s, cy + (30 - 6) * s),   # bottom right
-        (cx, cy + (58 - 6) * s),                    # bottom center
-        (cx + (10 - 32) * s, cy + (30 - 6) * s),   # bottom left
-        (cx + (10 - 32) * s, cy + (14 - 6) * s),   # top left return
-    ]
-    draw.polygon(shield, fill=fill_color)
+    offset_x = cx - 32 * s
+    offset_y = cy - 32 * s
+
+    def p(x, y):
+        return (offset_x + x * s, offset_y + y * s)
+
+    # Build shield path
+    # Start at (32, 6) - top center notch
+    pts = [p(32, 6)]
+    # Line to (54, 14) - top right
+    pts.append(p(54, 14))
+    # Line to (54, 30) - right side
+    pts.append(p(54, 30))
+    # Curve to bottom (32, 58)
+    pts.extend(cubic_bezier(p(54, 30), p(54, 44), p(44, 54), p(32, 58))[1:])
+    # Curve to left side (10, 30)
+    pts.extend(cubic_bezier(p(32, 58), p(20, 54), p(10, 44), p(10, 30))[1:])
+    # Line to (10, 14)
+    pts.append(p(10, 14))
+    # Close back to (32, 6)
+    pts.append(p(32, 6))
+
+    draw.polygon(pts, fill=fill_color)
+
+    # Eye marks (two small curved lines above the eye)
+    # SVG: M27 21 C27 25 27 25 24 27
+    marks = cubic_bezier(p(27, 21), p(27, 25), p(27, 25), p(24, 27), 8)
+    marks2 = cubic_bezier(p(37, 21), p(37, 25), p(37, 25), p(40, 27), 8)
+    draw.line(marks, fill=fill_color, width=max(2, int(s * 2.5)))
+    draw.line(marks2, fill=fill_color, width=max(2, int(s * 2.5)))
 
     # Eye ellipse (teal)
-    eye_bbox = [
-        cx + (20 - 32) * s, cy + (22 - 6) * s,
-        cx + (44 - 32) * s, cy + (38 - 6) * s,
-    ]
-    draw.ellipse(eye_bbox, fill=accent_color)
+    eye_bbox = [p(20, 22), p(44, 38)]
+    draw.ellipse([eye_bbox[0][0], eye_bbox[0][1], eye_bbox[1][0], eye_bbox[1][1]],
+                 fill=accent_color)
 
-    # Pupil
+    # Pupil (mint circle)
+    pupil_c = p(32, 30)
     pupil_r = 4 * s
-    draw.ellipse([
-        cx - pupil_r, cy + (30 - 6) * s - pupil_r,
-        cx + pupil_r, cy + (30 - 6) * s + pupil_r,
-    ], fill=fill_color)
+    draw.ellipse([pupil_c[0] - pupil_r, pupil_c[1] - pupil_r,
+                  pupil_c[0] + pupil_r, pupil_c[1] + pupil_r],
+                 fill=fill_color)
 
-    # Arrow
-    arrow = [
-        (cx + (32 - 32) * s, cy + (39 - 6) * s),
-        (cx + (29 - 32) * s, cy + (44 - 6) * s),
-        (cx + (35 - 32) * s, cy + (44 - 6) * s),
-    ]
+    # Arrow below eye
+    # SVG: M32 39 L29 44 H35 Z
+    arrow = [p(32, 39), p(29, 44), p(35, 44)]
     draw.polygon(arrow, fill=accent_color)
 
 
