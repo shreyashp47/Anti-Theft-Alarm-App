@@ -1,8 +1,18 @@
 import os
+import subprocess
 from PIL import Image, ImageDraw, ImageFont
 
-OUT_DIR = "store_assets"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+APPICON_DIR = os.path.join(SCRIPT_DIR, "..", "requirements", "appicon")
+OUT_DIR = os.path.join(SCRIPT_DIR, "..", "store_assets")
 os.makedirs(f"{OUT_DIR}/screenshots", exist_ok=True)
+
+def convert_svg(name, width, height, output_path):
+    svg_path = os.path.join(APPICON_DIR, name)
+    subprocess.run(
+        ["rsvg-convert", "-w", str(width), "-h", str(height), svg_path, "-o", output_path],
+        check=True, capture_output=True
+    )
 
 # New dark theme palette
 GUARD = (15, 110, 86)        # #0F6E56 deep teal
@@ -83,16 +93,7 @@ def draw_shield(draw, cx, cy, size, fill_color, accent_color):
 
 
 def create_icon():
-    img = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-
-    # Rounded square background
-    draw_rounded_rect(draw, (0, 0, 512, 512), 112, GUARD)
-
-    # Shield icon at center, size 300
-    draw_shield(draw, 256, 256, 300, SHIELD_LIGHT, GUARD)
-
-    img.save(f"{OUT_DIR}/icon-512.png")
+    convert_svg("app_icon_512.svg", 512, 512, f"{OUT_DIR}/icon-512.png")
     print("✓ icon-512.png")
 
 
@@ -107,8 +108,13 @@ def create_feature_graphic():
     draw_rounded_rect(draw, (50, 120, 974, 380), 40, SURFACE)
     draw.rounded_rectangle([50, 120, 974, 380], radius=40, outline=BORDER, width=2)
 
-    # Small shield icon on card
-    draw_shield(draw, 512, 195, 56, SHIELD_LIGHT, GUARD)
+    # Shield icon on card from SVG
+    tmp_icon = f"{OUT_DIR}/.tmp_shield.png"
+    convert_svg("ic_launcher_foreground.svg", 56, 56, tmp_icon)
+    icon_img = Image.open(tmp_icon).convert("RGBA")
+    icon_x, icon_y = 512 - 28, 195 - 28
+    img.paste(icon_img, (icon_x, icon_y), icon_img)
+    os.remove(tmp_icon)
 
     try:
         font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 44)
@@ -129,11 +135,14 @@ def create_screenshot_pin_create():
     img = Image.new("RGB", (1080, 1920), BG)
     draw = ImageDraw.Draw(img)
 
-    # Status bar
     draw.rectangle([0, 0, 1080, 80], fill=BG)
 
-    # Lock icon
-    draw_shield(draw, 540, 240, 100, SHIELD_LIGHT, GUARD)
+    # Shield icon from SVG
+    tmp_icon = f"{OUT_DIR}/.tmp_shield_lg.png"
+    convert_svg("ic_launcher_foreground.svg", 100, 100, tmp_icon)
+    icon_img = Image.open(tmp_icon).convert("RGBA")
+    img.paste(icon_img, (540 - 50, 240 - 50), icon_img)
+    os.remove(tmp_icon)
 
     # Title
     try:
@@ -193,8 +202,12 @@ def create_screenshot_pin_entry():
 
     draw.rectangle([0, 0, 1080, 80], fill=BG)
 
-    # Lock icon
-    draw_shield(draw, 540, 240, 100, SHIELD_LIGHT, GUARD)
+    # Shield icon from SVG
+    tmp_icon = f"{OUT_DIR}/.tmp_shield_lg.png"
+    convert_svg("ic_launcher_foreground.svg", 100, 100, tmp_icon)
+    icon_img = Image.open(tmp_icon).convert("RGBA")
+    img.paste(icon_img, (540 - 50, 240 - 50), icon_img)
+    os.remove(tmp_icon)
 
     try:
         font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 44)
