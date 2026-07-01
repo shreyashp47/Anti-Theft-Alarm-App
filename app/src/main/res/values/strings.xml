@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AntiTheft Alarm</string>
+    <string name="pin_create_title">Set Your PIN</string>
+    <string name="pin_create_hint">Enter a 4-digit PIN</string>
+    <string name="pin_confirm_hint">Confirm PIN</string>
+    <string name="pin_mismatch">PINs do not match</string>
+    <string name="pin_too_short">PIN must be at least 4 digits</string>
+    <string name="pin_entry_title">Enter PIN</string>
+    <string name="pin_entry_hint">Enter your PIN</string>
+    <string name="pin_invalid">Incorrect PIN</string>
+    <string name="unlock">Unlock</string>
+    <string name="set_pin">Set PIN</string>
+    <string name="home_title">AntiTheft Alarm</string>
+    <string name="app_description">Keep your device safe with intelligent theft detection.</string>
+    <string name="armed">Armed</string>
+    <string name="disarmed">Disarmed</string>
+</resources>
