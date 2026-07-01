@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.shreyash.antitheft.R
+import com.shreyash.antitheft.service.PrefsManager
 import com.shreyash.antitheft.ui.theme.AntiTheftAlarmTheme
 import com.shreyash.antitheft.util.PermissionManager
 import com.shreyash.antitheft.util.PermissionRequirement
@@ -57,6 +59,7 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val prefsManager = remember { PrefsManager(context) }
     val required = remember { PermissionManager.requiredPermissions }
     val optional = remember { PermissionManager.optionalPermissions }
     val allPermissions = remember { required + optional }
@@ -66,6 +69,7 @@ fun SettingsScreen(
     }
     var pendingRequirement by remember { mutableStateOf<PermissionRequirement?>(null) }
     var infoRequirement by remember { mutableStateOf<PermissionRequirement?>(null) }
+    var chargingGuardEnabled by remember { mutableStateOf(prefsManager.isChargingGuardEnabled) }
 
     val spacingSmall = dimensionResource(R.dimen.spacing_small)
     val spacingMedium = dimensionResource(R.dimen.spacing_medium)
@@ -132,6 +136,51 @@ fun SettingsScreen(
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(spacingSmall),
         ) {
+            Spacer(modifier = Modifier.height(spacingMedium))
+
+            Text(
+                text = stringResource(R.string.settings_features_section),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+            )
+
+            Spacer(modifier = Modifier.height(spacingSmall))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(spacingSmall),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                ),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = dimensionResource(R.dimen.spacing_medium), vertical = spacingSmall),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(R.string.feature_charging_guard),
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.Medium,
+                        )
+                        Text(
+                            text = stringResource(R.string.feature_charging_guard_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Switch(
+                        checked = chargingGuardEnabled,
+                        onCheckedChange = { enabled ->
+                            chargingGuardEnabled = enabled
+                            prefsManager.isChargingGuardEnabled = enabled
+                        }
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(spacingMedium))
 
             Text(

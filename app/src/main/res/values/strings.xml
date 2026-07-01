@@ -45,8 +45,17 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_features_section">Features</string>
     <string name="settings_permissions_section">Permissions</string>
     <string name="back">Back</string>
+
+    <!-- Features -->
+    <string name="feature_charging_guard">Charging Guard</string>
+    <string name="feature_charging_guard_desc">Trigger alarm when charger is disconnected while armed</string>
+
+    <!-- Alarm -->
+    <string name="alarm_triggered_title">ALARM TRIGGERED</string>
+    <string name="alarm_enter_pin">Enter your PIN to dismiss</string>
 
     <!-- Permission names -->
     <string name="permission_name_notifications">Notifications</string>
