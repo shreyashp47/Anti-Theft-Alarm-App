@@ -3,6 +3,7 @@ name: Build
 on:
   pull_request:
     branches: [main]
+    types: [closed]
   workflow_dispatch:
 
 jobs:
@@ -30,33 +31,13 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Decode keystore
-        if: github.event_name != 'pull_request'
+        if: (github.event_name == 'pull_request' && github.event.pull_request.merged) || github.event_name == 'workflow_dispatch'
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_FILE_BASE64 }}
         run: mkdir -p keystore_details && echo "$KEYSTORE_BASE64" | base64 -d > keystore_details/antitheft.jks
 
-      - name: Build signed release AAB
-        if: github.event_name != 'pull_request'
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew bundleRelease
-
-      - name: Upload to Google Play
-        if: github.event_name != 'pull_request'
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.shreyash.antitheft
-          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: ${{ startsWith(github.ref, 'refs/tags/') && 'production' || 'PublicTrack' }}
-          status: completed
-          inAppUpdatePriority: 2
-          whatsNewDirectory: whatsnew/
-
       - name: Bump version
-        if: github.event_name != 'pull_request'
+        if: (github.event_name == 'pull_request' && github.event.pull_request.merged) || github.event_name == 'workflow_dispatch'
         id: bump
         run: |
           props="version.properties"
@@ -73,8 +54,28 @@ jobs:
           echo "new_version_code=$new_code" >> "$GITHUB_OUTPUT"
           echo "new_version_name=$new_name" >> "$GITHUB_OUTPUT"
 
+      - name: Build signed release AAB
+        if: (github.event_name == 'pull_request' && github.event.pull_request.merged) || github.event_name == 'workflow_dispatch'
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew bundleRelease
+
+      - name: Upload to Google Play
+        if: (github.event_name == 'pull_request' && github.event.pull_request.merged) || github.event_name == 'workflow_dispatch'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.shreyash.antitheft
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: ${{ startsWith(github.ref, 'refs/tags/') && 'production' || 'PublicTrack' }}
+          status: completed
+          inAppUpdatePriority: 2
+          whatsNewDirectory: whatsnew/
+
       - name: Commit version bump
-        if: github.event_name != 'pull_request'
+        if: ((github.event_name == 'pull_request' && github.event.pull_request.merged) || github.event_name == 'workflow_dispatch') && steps.bump.outputs.new_version_name != ''
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

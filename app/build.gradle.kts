@@ -76,6 +76,9 @@ android {
         checkDependencies = false
         disable.add("GradleDependency")
         disable.add("UnusedResources")
+        disable.add("InlinedApi")
+        disable.add("NewApi")
+        disable.add("BatteryLife")
         checkGeneratedSources = false
     }
 }

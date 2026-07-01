@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -121,27 +123,12 @@ fun PinKeypad(
         ) {
             Spacer(modifier = Modifier.weight(1f))
             KeypadButton("0", { onDigit(0) }, Modifier.weight(1f))
-            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                Box(
-                    modifier = Modifier
-                        .size(72.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = onDelete
-                        ),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Backspace,
-                        contentDescription = "Delete",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.size(28.dp)
-                    )
-                }
-            }
+            KeypadButton(
+                label = "",
+                onClick = onDelete,
+                modifier = Modifier.weight(1f),
+                isBackspace = true,
+            )
         }
     }
 }
@@ -150,8 +137,10 @@ fun PinKeypad(
 private fun KeypadButton(
     label: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isBackspace: Boolean = false,
 ) {
+    val haptic = LocalHapticFeedback.current
     val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
     val onSurface = MaterialTheme.colorScheme.onSurface
 
@@ -163,16 +152,27 @@ private fun KeypadButton(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = onClick
+                onClick = {
+                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onClick()
+                }
             ),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = label,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Medium,
-            color = onSurface,
-            textAlign = TextAlign.Center
-        )
+        if (isBackspace) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Backspace,
+                contentDescription = "Delete",
+                tint = onSurface,
+            )
+        } else {
+            Text(
+                text = label,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Medium,
+                color = onSurface,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
