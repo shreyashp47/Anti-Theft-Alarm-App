@@ -41,6 +41,9 @@
 - From Home screen: toggle Guard Mode switch
 
 ## Privacy Policy
+**URL to enter in Play Console:**
+https://shreyashp47.github.io/Anti-Theft-Alarm-App/privacy_policy.html
+
 This app does not collect, store, or transmit any personal data. All data (PIN, settings) is stored locally on your device using encrypted storage. No internet connection is required. The app uses the Camera only for the Intruder Selfie feature, which is stored locally and never uploaded unless you explicitly share it.
 
 ## GDPR / Data Safety
