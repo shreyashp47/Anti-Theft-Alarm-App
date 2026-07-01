@@ -5,13 +5,27 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
     <group
-        android:translateX="22"
-        android:translateY="22">
+        android:translateX="17.2"
+        android:translateY="17.2"
+        android:scaleX="1.15"
+        android:scaleY="1.15">
         <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M32,4C16.536,4 4,16.536 4,32s12.536,28 28,28 28,-12.536 28,-28S47.464,4 32,4zM32,12c11.046,0 20,8.954 20,20s-8.954,20 -20,20 -20,-8.954 -20,-20 8.954,-20 20,-20z" />
+            android:fillColor="#E1F5EE"
+            android:pathData="M32 6 L54 14 V30 C54 44 44 54 32 58 C20 54 10 44 10 30 V14 Z" />
         <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M28,20v8h-8v8h8v8h8v-8h8v-8h-8v-8z" />
+            android:strokeColor="#E1F5EE"
+            android:strokeWidth="2.5"
+            android:strokeLineCap="round"
+            android:fillColor="@android:color/transparent"
+            android:pathData="M27 21 C27 25 27 25 24 27 M37 21 C37 25 37 25 40 27" />
+        <path
+            android:fillColor="#0F6E56"
+            android:pathData="M20 30 C20 25.58 25.37 22 32 22 C38.63 22 44 25.58 44 30 C44 34.42 38.63 38 32 38 C25.37 38 20 34.42 20 30 Z" />
+        <path
+            android:fillColor="#E1F5EE"
+            android:pathData="M28 30 A4 4 0 1 1 36 30 A4 4 0 1 1 28 30 Z" />
+        <path
+            android:fillColor="#0F6E56"
+            android:pathData="M32 39 L29 44 H35 Z" />
     </group>
 </vector>

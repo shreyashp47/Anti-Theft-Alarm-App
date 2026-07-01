@@ -13,3 +13,6 @@ local.properties
 release.keystore.jks
 keystore_details/*.jks
 gradle.properties.local
+AGENTS.md
+requirements/
+__pycache__/
