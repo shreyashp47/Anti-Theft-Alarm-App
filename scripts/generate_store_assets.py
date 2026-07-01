@@ -4,150 +4,274 @@ from PIL import Image, ImageDraw, ImageFont
 OUT_DIR = "store_assets"
 os.makedirs(f"{OUT_DIR}/screenshots", exist_ok=True)
 
-GREEN = (27, 94, 32)
-DARK_GREEN = (0, 51, 0)
-ORANGE = (255, 111, 0)
+# New dark theme palette
+GUARD = (15, 110, 86)        # #0F6E56 deep teal
+MINT = (93, 202, 165)        # #5DCAA5
+ALARM = (226, 75, 74)         # #E24B4A coral
+BG = (18, 21, 26)             # #12151A near-black
+SURFACE = (27, 32, 39)        # #1B2027 charcoal
+TEXT = (242, 241, 236)        # #F2F1EC off-white
+TEXT_SEC = (139, 138, 130)    # #8B8A82 warm gray
+BORDER = (42, 47, 54)         # #2A2F36
+SHIELD_LIGHT = (225, 245, 238) # #E1F5EE mint light
 WHITE = (255, 255, 255)
-DARK = (33, 33, 33)
-GRAY = (158, 158, 158)
-BG = (245, 245, 245)
-RED = (211, 47, 47)
 
 def draw_rounded_rect(draw, xy, radius, fill):
-    x1, y1, x2, y2 = xy
     draw.rounded_rectangle(xy, radius=radius, fill=fill)
+
+def draw_shield(draw, cx, cy, size, fill_color, accent_color):
+    """Draw the shield-with-eye icon"""
+    s = size / 64
+    # Shield body
+    shield = [
+        (cx + (32 - 22) * s, cy + (6 - 6) * s),   # top left
+        (cx + (54 - 32) * s, cy + (14 - 6) * s),   # top right
+        (cx + (54 - 32) * s, cy + (30 - 6) * s),   # bottom right
+        (cx, cy + (58 - 6) * s),                    # bottom center
+        (cx + (10 - 32) * s, cy + (30 - 6) * s),   # bottom left
+        (cx + (10 - 32) * s, cy + (14 - 6) * s),   # top left return
+    ]
+    draw.polygon(shield, fill=fill_color)
+
+    # Eye ellipse (teal)
+    eye_bbox = [
+        cx + (20 - 32) * s, cy + (22 - 6) * s,
+        cx + (44 - 32) * s, cy + (38 - 6) * s,
+    ]
+    draw.ellipse(eye_bbox, fill=accent_color)
+
+    # Pupil
+    pupil_r = 4 * s
+    draw.ellipse([
+        cx - pupil_r, cy + (30 - 6) * s - pupil_r,
+        cx + pupil_r, cy + (30 - 6) * s + pupil_r,
+    ], fill=fill_color)
+
+    # Arrow
+    arrow = [
+        (cx + (32 - 32) * s, cy + (39 - 6) * s),
+        (cx + (29 - 32) * s, cy + (44 - 6) * s),
+        (cx + (35 - 32) * s, cy + (44 - 6) * s),
+    ]
+    draw.polygon(arrow, fill=accent_color)
+
 
 def create_icon():
     img = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
 
-    circle = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
-    cdraw = ImageDraw.Draw(circle)
-    cdraw.ellipse([56, 56, 456, 456], fill=GREEN)
-    img.paste(circle, (0, 0), circle)
+    # Rounded square background
+    draw_rounded_rect(draw, (0, 0, 512, 512), 112, GUARD)
 
-    cdraw.ellipse([168, 168, 344, 344], fill=WHITE)
-
-    draw.polygon([(220, 200), (220, 256), (164, 256), (164, 312),
-                   (220, 312), (220, 368), (292, 368), (292, 312),
-                   (348, 312), (348, 256), (292, 256), (292, 200)],
-                  fill=WHITE)
+    # Shield icon at center, size 300
+    draw_shield(draw, 256, 256, 300, SHIELD_LIGHT, GUARD)
 
     img.save(f"{OUT_DIR}/icon-512.png")
     print("✓ icon-512.png")
 
+
 def create_feature_graphic():
-    img = Image.new("RGB", (1024, 500), GREEN)
+    img = Image.new("RGB", (1024, 500), BG)
     draw = ImageDraw.Draw(img)
 
-    draw.rounded_rectangle([50, 150, 974, 350], radius=40, fill=DARK_GREEN)
+    # Accent stripe at top
+    draw.rectangle([0, 0, 1024, 6], fill=GUARD)
+
+    # Card in center
+    draw_rounded_rect(draw, (50, 120, 974, 380), 40, SURFACE)
+    draw.rounded_rectangle([50, 120, 974, 380], radius=40, outline=BORDER, width=2)
+
+    # Small shield icon on card
+    draw_shield(draw, 512, 195, 56, SHIELD_LIGHT, GUARD)
 
     try:
-        font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 48)
-        font_small = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
-    except:
-        font = ImageFont.load_default()
-        font_small = font
+        font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 44)
+        font_sub = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 24)
+    except Exception:
+        font_title = ImageFont.load_default()
+        font_sub = font_title
 
-    draw.text((512, 190), "AntiTheft Alarm", fill=WHITE, font=font, anchor="mt")
-    draw.text((512, 260), "Intelligent theft detection for your Android device",
-              fill=(200, 230, 200), font=font_small, anchor="mt")
+    draw.text((512, 240), "AntiTheft Alarm", fill=TEXT, font=font_title, anchor="mt")
+    draw.text((512, 295), "Intelligent theft detection for your Android device",
+              fill=TEXT_SEC, font=font_sub, anchor="mt")
 
-    draw.rectangle([0, 0, 1024, 8], fill=ORANGE)
     img.save(f"{OUT_DIR}/feature-graphic.png")
     print("✓ feature-graphic.png")
+
 
 def create_screenshot_pin_create():
     img = Image.new("RGB", (1080, 1920), BG)
     draw = ImageDraw.Draw(img)
 
-    draw.rectangle([0, 0, 1080, 160], fill=GREEN)
-    draw.text((540, 80), "AntiTheft Alarm", fill=WHITE, font=font_lg(), anchor="mt")
+    # Status bar
+    draw.rectangle([0, 0, 1080, 80], fill=BG)
 
-    draw.text((540, 350), "Set Your PIN", fill=DARK, font=font_lg(), anchor="mt")
+    # Lock icon
+    draw_shield(draw, 540, 240, 100, SHIELD_LIGHT, GUARD)
 
-    draw_rounded_rect(draw, (140, 480, 940, 620), 16, WHITE)
-    draw.rectangle([140, 480, 940, 620], outline=(200, 200, 200), width=2)
-    draw.text((160, 510), "Enter a 4-digit PIN", fill=GRAY, font=font_sm(), anchor="lt")
-    draw.line([160, 590, 920, 590], fill=(200, 200, 200), width=2)
+    # Title
+    try:
+        font_title = ImageFont.truetype("/System/Library/AssetsV2/Compatible/Mac/SystemFonts/Montserrat.otf", 44) if os.path.exists("/System/Library/AssetsV2/Compatible/Mac/SystemFonts/Montserrat.otf") else ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 44)
+        font_body = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
+        font_key = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 36)
+    except:
+        font_title = ImageFont.load_default()
+        font_body = font_title
+        font_key = font_title
 
-    draw_rounded_rect(draw, (140, 680, 940, 820), 16, WHITE)
-    draw.rectangle([140, 680, 940, 820], outline=(200, 200, 200), width=2)
-    draw.text((160, 710), "Confirm PIN", fill=GRAY, font=font_sm(), anchor="lt")
-    draw.line([160, 790, 920, 790], fill=(200, 200, 200), width=2)
+    draw.text((540, 340), "Create a PIN", fill=TEXT, font=font_title, anchor="mt")
+    draw.text((540, 400), "Choose a 4-digit PIN to secure your app",
+              fill=TEXT_SEC, font=font_body, anchor="mt")
 
-    draw_rounded_rect(draw, (140, 880, 940, 1000), 60, GREEN)
-    draw.text((540, 940), "Set PIN", fill=WHITE, font=font_md(), anchor="mt")
+    # PIN dots (2 filled, 2 empty)
+    for i in range(4):
+        cx = 390 + i * 100
+        r = 12
+        color = GUARD if i < 2 else SURFACE
+        draw.ellipse([cx - r, 470 - r, cx + r, 470 + r], fill=color)
 
-    draw_rounded_rect(draw, (0, 1830, 1080, 1920), 0, WHITE)
-    draw.line([360, 1870, 720, 1870], fill=DARK, width=4)
+    # Keypad
+    keys = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+    key_size = 90
+    gap = 24
+    start_y = 560
+    for row_idx, row in enumerate(keys):
+        y = start_y + row_idx * (key_size + gap)
+        total_width = 3 * key_size + 2 * gap
+        start_x = (1080 - total_width) // 2
+        for col_idx, key in enumerate(row):
+            x = start_x + col_idx * (key_size + gap)
+            draw_rounded_rect(draw, (x, y, x + key_size, y + key_size), 20, SURFACE)
+            draw.text((x + key_size // 2, y + key_size // 2), key,
+                      fill=TEXT, font=font_key, anchor="mm")
+
+    # Bottom row: spacer, 0, backspace
+    y = start_y + 3 * (key_size + gap)
+    total_width = 2 * key_size + gap
+    start_x = (1080 - total_width) // 2
+    x = start_x
+    draw_rounded_rect(draw, (x, y, x + key_size, y + key_size), 20, SURFACE)
+    draw.text((x + key_size // 2, y + key_size // 2), "0", fill=TEXT, font=font_key, anchor="mm")
+
+    # Navigation bar
+    draw.rectangle([0, 1830, 1080, 1920], fill=BG)
+    draw.line([360, 1870, 720, 1870], fill=TEXT_SEC, width=4)
 
     img.save(f"{OUT_DIR}/screenshots/01-pin-create.png")
     print("✓ screenshots/01-pin-create.png")
+
 
 def create_screenshot_pin_entry():
     img = Image.new("RGB", (1080, 1920), BG)
     draw = ImageDraw.Draw(img)
 
-    draw.rectangle([0, 0, 1080, 160], fill=GREEN)
-    draw.text((540, 80), "AntiTheft Alarm", fill=WHITE, font=font_lg(), anchor="mt")
+    draw.rectangle([0, 0, 1080, 80], fill=BG)
 
-    draw.text((540, 350), "Enter PIN", fill=DARK, font=font_lg(), anchor="mt")
+    # Lock icon
+    draw_shield(draw, 540, 240, 100, SHIELD_LIGHT, GUARD)
 
-    draw_rounded_rect(draw, (140, 480, 940, 620), 16, WHITE)
-    draw.rectangle([140, 480, 940, 620], outline=(200, 200, 200), width=2)
-    draw.text((160, 510), "Enter your PIN", fill=GRAY, font=font_sm(), anchor="lt")
+    try:
+        font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 44)
+        font_body = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
+        font_key = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 36)
+    except:
+        font_title = ImageFont.load_default()
+        font_body = font_title
+        font_key = font_title
+
+    draw.text((540, 340), "Enter PIN", fill=TEXT, font=font_title, anchor="mt")
+    draw.text((540, 400), "Enter your 4-digit PIN to continue",
+              fill=TEXT_SEC, font=font_body, anchor="mt")
+
+    # PIN dots - one filled with GUARD
     for i in range(4):
-        cx = 320 + i * 120
-        draw.ellipse([cx - 20, 565, cx + 20, 605], fill=DARK)
+        cx = 390 + i * 100
+        r = 12
+        color = GUARD if i < 1 else SURFACE
+        draw.ellipse([cx - r, 470 - r, cx + r, 470 + r], fill=color)
 
-    draw_rounded_rect(draw, (140, 880, 940, 1000), 60, GREEN)
-    draw.text((540, 940), "Unlock", fill=WHITE, font=font_md(), anchor="mt")
+    # Keypad (same as create)
+    keys = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"]]
+    key_size = 90
+    gap = 24
+    start_y = 560
+    for row_idx, row in enumerate(keys):
+        y = start_y + row_idx * (key_size + gap)
+        total_width = 3 * key_size + 2 * gap
+        start_x = (1080 - total_width) // 2
+        for col_idx, key in enumerate(row):
+            x = start_x + col_idx * (key_size + gap)
+            draw_rounded_rect(draw, (x, y, x + key_size, y + key_size), 20, SURFACE)
+            draw.text((x + key_size // 2, y + key_size // 2), key,
+                      fill=TEXT, font=font_key, anchor="mm")
 
-    draw_rounded_rect(draw, (0, 1830, 1080, 1920), 0, WHITE)
-    draw.line([360, 1870, 720, 1870], fill=DARK, width=4)
+    y = start_y + 3 * (key_size + gap)
+    total_width = 2 * key_size + gap
+    start_x = (1080 - total_width) // 2
+    draw_rounded_rect(draw, (start_x, y, start_x + key_size, y + key_size), 20, SURFACE)
+    draw.text((start_x + key_size // 2, y + key_size // 2), "0", fill=TEXT, font=font_key, anchor="mm")
+
+    draw.rectangle([0, 1830, 1080, 1920], fill=BG)
+    draw.line([360, 1870, 720, 1870], fill=TEXT_SEC, width=4)
 
     img.save(f"{OUT_DIR}/screenshots/02-pin-entry.png")
     print("✓ screenshots/02-pin-entry.png")
+
 
 def create_screenshot_home_armed():
     img = Image.new("RGB", (1080, 1920), BG)
     draw = ImageDraw.Draw(img)
 
-    draw.rectangle([0, 0, 1080, 160], fill=GREEN)
-    draw.text((540, 80), "AntiTheft Alarm", fill=WHITE, font=font_lg(), anchor="mt")
+    draw.rectangle([0, 0, 1080, 80], fill=BG)
 
-    draw.text((540, 450), "AntiTheft Alarm", fill=DARK, font=font_lg(), anchor="mt")
-    draw.text((540, 530), "Your device is protected.", fill=GRAY, font=font_md(), anchor="mt")
+    try:
+        font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 44)
+        font_body = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
+        font_small = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 24)
+    except:
+        font_title = ImageFont.load_default()
+        font_body = font_title
+        font_small = font_title
 
-    draw_rounded_rect(draw, (390, 700, 690, 780), 40, RED)
-    draw.text((540, 740), "ARMED", fill=WHITE, font=font_md(), anchor="mt")
+    # Guard mode card
+    draw_rounded_rect(draw, (80, 140, 1000, 340), 28, SURFACE)
+    draw.rounded_rectangle([80, 140, 1000, 340], radius=28, outline=BORDER, width=2)
 
-    draw.rectangle([440, 730, 640, 735], fill=(150, 30, 30))
+    draw.text((540, 190), "Armed \u00b7 all clear", fill=MINT, font=font_body, anchor="mt")
 
-    draw_rounded_rect(draw, (0, 1830, 1080, 1920), 0, WHITE)
-    draw.line([360, 1870, 720, 1870], fill=DARK, width=4)
+    # Toggle
+    toggle_x, toggle_y = 540, 250
+    draw_rounded_rect(draw, (toggle_x - 40, toggle_y - 12, toggle_x + 40, toggle_y + 12), 14, GUARD)
+    draw.ellipse([toggle_x + 22, toggle_y - 10, toggle_x + 38, toggle_y + 10], fill=WHITE)
+
+    draw.text((540, 290), "Guard mode", fill=TEXT_SEC, font=font_small, anchor="mt")
+
+    # Feature cards
+    features = [
+        ("Charging guard", GUARD, True),
+        ("Motion guard", GUARD, True),
+        ("SIM guard", SURFACE, False),
+    ]
+    for i, (label, color, active) in enumerate(features):
+        y = 380 + i * 90
+        draw_rounded_rect(draw, (80, y, 1000, y + 76), 18, SURFACE)
+        draw.text((120, y + 38), label, fill=TEXT, font=font_body, anchor="lm")
+        if active:
+            toggle_cx = 930
+            draw_rounded_rect(draw, (toggle_cx - 30, y + 28, toggle_cx + 30, y + 48), 12, GUARD)
+            draw.ellipse([toggle_cx + 14, y + 30, toggle_cx + 28, y + 46], fill=WHITE)
+        else:
+            toggle_cx = 930
+            draw_rounded_rect(draw, (toggle_cx - 30, y + 28, toggle_cx + 30, y + 48), 12, SURFACE)
+            draw.rounded_rectangle([toggle_cx - 30, y + 28, toggle_cx + 30, y + 48], radius=12, outline=BORDER, width=2)
+            draw.ellipse([toggle_cx - 26, y + 30, toggle_cx - 12, y + 46], fill=TEXT_SEC)
+
+    draw.rectangle([0, 1830, 1080, 1920], fill=BG)
+    draw.line([360, 1870, 720, 1870], fill=TEXT_SEC, width=4)
 
     img.save(f"{OUT_DIR}/screenshots/03-home-armed.png")
     print("✓ screenshots/03-home-armed.png")
 
-def font_lg():
-    try:
-        return ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 56)
-    except:
-        return ImageFont.load_default()
-
-def font_md():
-    try:
-        return ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 40)
-    except:
-        return ImageFont.load_default()
-
-def font_sm():
-    try:
-        return ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 32)
-    except:
-        return ImageFont.load_default()
 
 if __name__ == "__main__":
     create_icon()
