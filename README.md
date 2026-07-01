@@ -10,11 +10,11 @@
 
 Intelligent theft alarm that protects your phone when charging or unattended. Designed for phones left in public places — cafes, airports, libraries, and shared workspaces.
 
-**Package:** `com.shreyash.antitheft` · **v1.0.1**
+**Package:** `com.shreyash.antitheft`
 
 <p align="center">
   <a href="https://play.google.com/store/apps/details?id=com.shreyash.antitheft">
-    <img src="https://img.shields.io/badge/Google_Play-Open_Testing-8BCBFF?style=for-the-badge&logo=google-play&logoColor=white" alt="Google Play">
+    <img src="https://img.shields.io/badge/Google_Play-Closed_Testing_(PublicTrack)-8BCBFF?style=for-the-badge&logo=google-play&logoColor=white" alt="Google Play">
   </a>
 </p>
 
@@ -58,9 +58,9 @@ This app does **not collect, store, or transmit any personal data**. All data (P
 
 Privacy Policy: [shreyashp47.github.io/Anti-Theft-Alarm-App/privacy_policy.html](https://shreyashp47.github.io/Anti-Theft-Alarm-App/privacy_policy.html)
 
-## Open Testing
+## Closed Testing (PublicTrack)
 
-This app is in open testing on Google Play. To help me get it to production:
+This app is in closed testing on Google Play under the **PublicTrack** track. To join the test:
 
 1. **Join the tester group:** [Google Groups](https://groups.google.com/g/antitheft-alarm-testers)
 2. **Install the app:** Once approved, install from the [Play Store listing](https://play.google.com/store/apps/details?id=com.shreyash.antitheft)

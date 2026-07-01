@@ -1,24 +1,34 @@
 # AGENTS.md — AntiTheftAlarmApp
 
-**Remote:** `git@github.com:shreyashp47/Anti-Theft-Alarm-App.git` (empty — no code pushed yet)
+**Remote:** `git@github.com:shreyashp47/Anti-Theft-Alarm-App.git` (Play Store live on PublicTrack)
+
+**Version:** read from `version.properties` (auto-bumped by CI after each upload)
 
 ## Project overview
 
 Kotlin Android anti-theft alarm app. No backend — all data stays on-device. No ads, no monetization.
 
-## Tech stack (decided in project brief)
+## Status
+
+- Issue #1 (Project scaffolding) — **Closed** ✅
+- App live on Play Store: [Closed Testing (PublicTrack)](https://play.google.com/store/apps/details?id=com.shreyash.antitheft)
+- Privacy Policy: https://shreyashp47.github.io/Anti-Theft-Alarm-App/privacy_policy.html
+- Development on `develop` branch; merge to `main` via PR
+
+## Tech stack
 
 | Concern | Choice |
 |---|---|
 | Language | Kotlin |
 | Min SDK | API 21 (Lollipop) |
-| Compile/Target SDK | 36 (latest available on local SDK + CI) |
+| Compile/Target SDK | 36 |
 | Build | Gradle (Kotlin DSL) |
+| UI | Jetpack Compose (Material 3) + Compose Navigation |
 | Foreground service | Jetpack Lifecycle + ForegroundService (Android 8+ persistent notification) |
 | Background work / reboot | `BroadcastReceiver` for `BOOT_COMPLETED` + WorkManager |
 | Sensors | `SensorManager` (accelerometer for Motion Guard) |
 | Storage | EncryptedSharedPreferences (PIN, settings) + app-internal files (photos, history) |
-| PIN/biometric | Jetpack `biometric`, `AppLock`-style PIN (not device unlock) |
+| PIN/biometric | App-level PIN via `security-crypto` (not device unlock) |
 | Device admin | `DevicePolicyManager` (Device Admin API) |
 
 ## Feature build order
