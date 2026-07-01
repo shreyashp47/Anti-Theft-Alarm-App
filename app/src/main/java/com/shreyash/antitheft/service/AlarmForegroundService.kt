@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.BatteryManager
-import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -14,13 +13,13 @@ import com.shreyash.antitheft.util.NotificationHelper
 class AlarmForegroundService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private var wasCharging: Boolean = false
+    private var wasPluggedIn: Boolean = false
     private var isPolling = false
 
     private val pollRunnable = object : Runnable {
         override fun run() {
             if (!isPolling) return
-            checkChargingState()
+            checkPlugState()
             handler.postDelayed(this, POLL_INTERVAL_MS)
         }
     }
@@ -28,12 +27,13 @@ class AlarmForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         NotificationHelper.createChannels(this)
-        wasCharging = isCurrentlyCharging()
+        wasPluggedIn = isPluggedIn()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification = NotificationHelper.buildNotification(this)
         startForeground(NOTIFICATION_ID, notification)
+        wasPluggedIn = isPluggedIn()
         if (!isPolling) {
             isPolling = true
             handler.post(pollRunnable)
@@ -41,11 +41,7 @@ class AlarmForegroundService : Service() {
         return START_STICKY
     }
 
-    private fun isCurrentlyCharging(): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val bm = getSystemService(BATTERY_SERVICE) as? BatteryManager ?: return false
-            return bm.isCharging
-        }
+    private fun isPluggedIn(): Boolean {
         val sticky = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val plugged = sticky?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0
         return plugged == BatteryManager.BATTERY_PLUGGED_AC ||
@@ -53,13 +49,13 @@ class AlarmForegroundService : Service() {
                plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS
     }
 
-    private fun checkChargingState() {
+    private fun checkPlugState() {
         val prefs = PrefsManager(this)
-        val nowCharging = isCurrentlyCharging()
+        val nowPlugged = isPluggedIn()
         prefs.lastPollTime = System.currentTimeMillis()
-        prefs.isCharging = nowCharging
+        prefs.isCharging = nowPlugged
 
-        if (wasCharging && !nowCharging) {
+        if (wasPluggedIn && !nowPlugged) {
             val eventLog = EventLog(this)
             prefs.lastDisconnectTime = System.currentTimeMillis()
             eventLog.addEvent("info", "Charger disconnected (service poll)")
@@ -70,7 +66,7 @@ class AlarmForegroundService : Service() {
             eventLog.addEvent("alarm", "Charging Guard triggered")
             prefs.pendingAlarm = true
         }
-        wasCharging = nowCharging
+        wasPluggedIn = nowPlugged
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
